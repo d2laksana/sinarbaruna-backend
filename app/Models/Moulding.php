@@ -12,4 +12,7 @@ class Moulding extends Model
     protected $fillable = [
         'type_moulding'
     ];
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
 }

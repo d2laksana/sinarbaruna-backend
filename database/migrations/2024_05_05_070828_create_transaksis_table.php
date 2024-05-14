@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->string('id')->unique();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('moulding_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('moulding_id')->references('id')->on('moulding');
             $table->timestamps();
         });
     }
