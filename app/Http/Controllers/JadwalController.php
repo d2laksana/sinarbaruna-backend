@@ -133,7 +133,7 @@ class JadwalController extends Controller
         ], 200);
     }
 
-    public function updateKeterangan(Request $request, Jadwal $jadwal)
+    public function updateKeterangan(Request $request, $id)
     {
         $validation = Validator::make($request->all(), [
             'keterangan' => 'required|in:Selesai,Proses,Tidak Selesai'
@@ -142,6 +142,7 @@ class JadwalController extends Controller
         if ($validation->fails()) {
             return response()->json($validation->errors(), 422);
         }
+        $jadwal = Jadwal::find($id);
 
         try {
             $jadwal->update([

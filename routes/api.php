@@ -17,4 +17,4 @@ Route::post('/user/karyawan', [UserController::class, 'storeKaryawan'])->middlew
 Route::apiResource('/moulding', MouldingController::class)->middleware(CekToken::class);
 Route::apiResource('/trx', TransaksiController::class)->middleware(CekToken::class);
 Route::apiResource('/jadwal', JadwalController::class)->middleware(CekToken::class);
-Route::post('/jadwal/keterangan', [JadwalController::class, 'updateKeterangan'])->middleware(CekToken::class);
+Route::put('/jadwal/keterangan/{id}', [JadwalController::class, 'updateKeterangan'])->middleware(CekToken::class);
