@@ -58,6 +58,36 @@ class UserController extends Controller
         ], 409);
     }
 
+    public function storeKaryawan(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'username' => 'required|unique:users',
+            'password' => 'required|min:8',
+            'bagian' => 'required|in:manual,cnc',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json($validation->errors(), 422);
+        }
+
+        $user = User::create([
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'bagian' => $request->bagian
+        ]);
+
+        if ($user) {
+            return response()->json([
+                'success' => true,
+                'user'    => $user,
+            ], 201);
+        }
+
+        return response()->json([
+            'success' => false,
+        ], 409);
+    }
+
     /**
      * Display the specified resource.
      */
@@ -75,7 +105,31 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validation = Validator::make($request->all(), [
+            'name' => 'required',
+            'username' => 'required|unique:users',
+            'password' => 'required|min:8',
+            'bagian' => 'required|in:manual,cnc',
+            'role' => 'required|in:admin,manajer,kepala bagian, karyawan',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json($validation->errors(), 422);
+        }
+
+        try {
+            $user->update($request->all());
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil di update',
+                'data' => $user
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
