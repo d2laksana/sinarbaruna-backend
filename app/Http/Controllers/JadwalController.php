@@ -40,7 +40,7 @@ class JadwalController extends Controller
             return response()->json($validation->errors(), 422);
         }
 
-        $user = User::where('username', $request->username);
+        $user = User::where('username', $request->username)->first();
 
         $jadwal = Jadwal::create([
             'id_moulding' => $request->id_moulding,
@@ -88,14 +88,14 @@ class JadwalController extends Controller
             'type_moulding' => 'required',
             'durasi' => 'required',
             'mulai_tanggal' => 'required',
-            'keterangan' => 'required'
+            'keterangan' => 'required|in:Selesai,Proses,Tidak Selesai'
         ]);
 
         if ($validation->fails()) {
             return response()->json($validation->errors(), 422);
         }
 
-        $user = User::where('username', $request->username);
+        $user = User::where('username', $request->username)->first();
 
         try {
             $jadwal->update([
@@ -131,5 +131,33 @@ class JadwalController extends Controller
             'success' => true,
             'message' => 'Berhasil menghapus data jadwal'
         ], 200);
+    }
+
+    public function updateKeterangan(Request $request, Jadwal $jadwal)
+    {
+        $validation = Validator::make($request->all(), [
+            'keterangan' => 'required|in:Selesai,Proses,Tidak Selesai'
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json($validation->errors(), 422);
+        }
+
+        try {
+            $jadwal->update([
+                'keterangan' => $request->keterangan,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil di update',
+                'data' => $jadwal
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 }
