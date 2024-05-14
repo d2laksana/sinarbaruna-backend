@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Moulding;
-use App\Http\Requests\StoreMouldingRequest;
-use App\Http\Requests\UpdateMouldingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
