@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Jadwal;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class JadwalController extends Controller
@@ -14,7 +15,13 @@ class JadwalController extends Controller
      */
     public function index()
     {
-        $jadwal = Jadwal::all();
+        // $jadwal = Jadwal::all();
+        $jadwal = DB::table('jadwals')
+            ->join('users', 'user_id', '=', 'users.id')
+            ->select('jadwals.*', 'users.username')
+            ->get();
+
+
         return response()->json([
             'success' => true,
             'data' => $jadwal
@@ -172,7 +179,12 @@ class JadwalController extends Controller
         $kepalabagian = User::where('bagian', $user->bagian)->where('role', "kepala bagian")->first();
 
         // search jadwal berdasarkan kepala bagian
-        $jadwalKepala = Jadwal::where('user_id', $kepalabagian->id)->get();
+        // $jadwalKepala = Jadwal::where('user_id', $kepalabagian->id)->get();
+        $jadwalKepala = DB::table('jadwals')
+            ->join('users', 'user_id', '=', 'users.id')
+            ->select('jadwals.*', 'users.username')
+            ->where('jadwals.user_id', '=', $kepalabagian->id)
+            ->get();
 
         return response()->json([
             'success' => true,
