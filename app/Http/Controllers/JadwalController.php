@@ -39,8 +39,7 @@ class JadwalController extends Controller
             'tanggal' => 'required',
             'type_moulding' => 'required',
             'durasi' => 'required',
-            'mulai_tanggal' => 'required',
-            'keterangan' => 'required'
+            'mulai_tanggal' => 'required'
         ]);
 
         if ($validation->fails()) {
@@ -56,7 +55,6 @@ class JadwalController extends Controller
             'type_moulding' => $request->type_moulding,
             'durasi' => $request->durasi,
             'mulai_tanggal' => $request->mulai_tanggal,
-            'keterangan' => $request->keterangan,
         ]);
 
         if ($jadwal) {

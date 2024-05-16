@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('durasi');
             $table->date('mulai_tanggal');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->enum('keterangan', ['Selesai', 'Proses', 'Tidak Selesai']);
+            $table->enum('keterangan', ['Selesai', 'Proses', 'Tidak Selesai'])->default("Tidak Selesai");
             $table->timestamps();
         });
     }
