@@ -161,4 +161,22 @@ class JadwalController extends Controller
             ], 500);
         }
     }
+
+    public function getJadwal()
+    {
+        $user = auth()->user();
+
+        // search jadwal berdasarkan user id yang login
+        // $jadwal = Jadwal::where('user_id', $user->id)->get();
+
+        $kepalabagian = User::where('bagian', $user->bagian)->where('role', "kepala bagian")->first();
+
+        // search jadwal berdasarkan kepala bagian
+        $jadwalKepala = Jadwal::where('user_id', $kepalabagian->id)->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $jadwalKepala
+        ], 200);
+    }
 }

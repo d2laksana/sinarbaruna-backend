@@ -18,3 +18,4 @@ Route::apiResource('/moulding', MouldingController::class)->middleware(CekToken:
 Route::apiResource('/trx', TransaksiController::class)->middleware(CekToken::class);
 Route::apiResource('/jadwal', JadwalController::class)->middleware(CekToken::class);
 Route::put('/jadwal/keterangan/{id}', [JadwalController::class, 'updateKeterangan'])->middleware(CekToken::class);
+Route::get('/bagian', [JadwalController::class, 'getJadwal'])->middleware(CekToken::class);
