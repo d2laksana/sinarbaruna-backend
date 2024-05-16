@@ -55,6 +55,7 @@ class JadwalController extends Controller
             'type_moulding' => $request->type_moulding,
             'durasi' => $request->durasi,
             'mulai_tanggal' => $request->mulai_tanggal,
+            'keterangan' => $request->keterangan,
         ]);
 
         if ($jadwal) {
