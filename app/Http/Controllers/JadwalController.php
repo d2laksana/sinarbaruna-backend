@@ -106,9 +106,15 @@ class JadwalController extends Controller
             return response()->json($validation->errors(), 422);
         }
 
-        $user = User::where('username', $request->username)->first();
+
 
         try {
+            $user = User::where('username', $request->username)->first();
+            if (!$user) return response()->json([
+                "success" => false,
+                "message" => "Username not found"
+            ], 404);
+
             $jadwal->update([
                 'id_moulding' => $request->id_moulding,
                 'user_id' => $user->id,
