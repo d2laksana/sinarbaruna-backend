@@ -75,9 +75,15 @@ class JadwalController extends Controller
      */
     public function show(Jadwal $jadwal)
     {
+        $jad = DB::table('jadwals')
+            ->join('users', 'user_id', '=', 'users.id')
+            ->select('jadwals.*', 'users.username')
+            ->where('jadwals.id', '=', $jadwal->id)
+            ->get();
+
         return response()->json([
             'success' => true,
-            'data' => $jadwal
+            'data' => $jad
         ], 200);
     }
 
