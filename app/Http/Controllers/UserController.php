@@ -31,7 +31,7 @@ class UserController extends Controller
             'username' => 'required|unique:users',
             'password' => 'required|min:8',
             'bagian' => 'required|in:manual,cnc',
-            'role' => 'required|in:admin,manajer,kepala bagian, karyawan',
+            'role' => 'required|in:admin,manajer,kepala bagian,karyawan',
         ]);
 
         if ($validation->fails()) {
