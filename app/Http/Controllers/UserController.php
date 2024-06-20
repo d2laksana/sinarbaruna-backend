@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\password_reset_tokens;
+use App\Models\ResetPasswordToken;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +31,7 @@ class UserController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required',
             'username' => 'required|unique:users',
+            'email' => 'required|unique:users',
             'password' => 'required|min:8',
             'bagian' => 'required|in:manual,cnc',
             'role' => 'required|in:admin,manajer,kepala bagian,karyawan',
@@ -41,6 +44,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'username' => $request->username,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'bagian' => $request->bagian || null,
             'role' => $request->role,
@@ -62,6 +66,7 @@ class UserController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'username' => 'required|unique:users',
+            'email' => 'required|unique:users',
             'password' => 'required|min:8',
             'bagian' => 'required|in:manual,cnc',
         ]);
@@ -72,6 +77,7 @@ class UserController extends Controller
 
         $user = User::create([
             'username' => $request->username,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'bagian' => $request->bagian
         ]);
@@ -142,5 +148,43 @@ class UserController extends Controller
             'success' => true,
             'message' => 'Berhasil menghapus user'
         ], 200);
+    }
+
+    public function updatePassword(Request $request) {
+        try {
+            $validation = Validator::make($request->all(), [
+                'email' => 'required|exists:users,email',
+                'token' => 'required',
+                'password' => 'required|confirmed',
+                
+            ]);
+    
+            if ($validation->fails()) {
+                return response()->json($validation->errors(), 422);
+            }
+
+
+            $user = User::where('email', '=', $request->email)->first();
+            $token = ResetPasswordToken::where('email', '=', $request->email)->first();
+            $token->delete();
+
+            $user->update([
+                'password' => Hash::make($request->password) 
+            ]);
+
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Password berhasil di update',
+            ], 200);
+
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+
     }
 }

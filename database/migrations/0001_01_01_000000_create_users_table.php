@@ -15,20 +15,27 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('username')->unique();
+            $table->string('email')->unique()->index();
             $table->string('password');
             $table->enum('bagian', ['manual', 'cnc'])->nullable();
             $table->enum('role', ['admin', 'manajer', 'kepala bagian', 'karyawan'])->default('karyawan');
             $table->timestamps();
         });
 
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
-        });
+        // Schema::create('password_reset_tokens', function (Blueprint $table) {
+        //     $table->string('email')->primary();
+        //     $table->string('token');
+        //     $table->timestamps();
+        // });
+
+        // Schema::create('sessions', function (Blueprint $table) {
+        //     $table->string('id')->primary();
+        //     $table->foreignId('user_id')->nullable()->index();
+        //     $table->string('ip_address', 45)->nullable();
+        //     $table->text('user_agent')->nullable();
+        //     $table->longText('payload');
+        //     $table->integer('last_activity')->index();
+        // });
     }
 
     /**
