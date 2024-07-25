@@ -117,7 +117,7 @@ class UserController extends Controller
             'email' => 'required|unique:users',
             'password' => 'required|min:8',
             'bagian' => 'required|in:manual,cnc',
-            'role' => 'required|in:admin,manajer,kepala bagian, karyawan',
+            'role' => 'required|in:admin,manajer,kepala bagian,karyawan',
         ]);
 
         if ($validation->fails()) {
@@ -151,15 +151,16 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function updatePassword(Request $request) {
+    public function updatePassword(Request $request)
+    {
         try {
             $validation = Validator::make($request->all(), [
                 'email' => 'required|exists:users,email',
                 'token' => 'required',
                 'password' => 'required|confirmed',
-                
+
             ]);
-    
+
             if ($validation->fails()) {
                 return response()->json($validation->errors(), 422);
             }
@@ -170,7 +171,7 @@ class UserController extends Controller
             $token->delete();
 
             $user->update([
-                'password' => Hash::make($request->password) 
+                'password' => Hash::make($request->password)
             ]);
 
 
@@ -178,14 +179,11 @@ class UserController extends Controller
                 'success' => true,
                 'message' => 'Password berhasil di update',
             ], 200);
-
-
         } catch (\Throwable $th) {
             return response()->json([
                 'success' => false,
                 'message' => $th->getMessage()
             ], 500);
         }
-
     }
 }
